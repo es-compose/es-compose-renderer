@@ -5,9 +5,9 @@ var path = require('path');
 describe("Renderer", function() {
     const Renderer = require('../');
     let renderer = new Renderer({
-        engine: 'handlebars',
-        ext: 'html',
-        views: __dirname
+        viewEngines: { html:  'handlebars'},
+        viewExt: 'html',
+        viewPaths: __dirname
     });
 
     describe('#pathForScript', () => {
@@ -33,7 +33,7 @@ describe("Renderer", function() {
 
         it("should support multiple view dirs", async () => {
             renderer.options = Object.assign({}, renderer.options, {
-                views: [__dirname, path.join(__dirname, 'views')]
+                viewPaths: [__dirname, path.join(__dirname, 'views')]
             })
 
             let content = await renderer.render('test3');
@@ -47,7 +47,7 @@ describe("Renderer", function() {
 
         it("should support layout", async () => {
             let content = await renderer.render('test2', {
-                layout : 'layout'
+                viewLayout : 'layout'
             })
 
             expect(content).to.be.eq('<h1>From Layout</h1><h1>Test2</h1>');
@@ -55,11 +55,20 @@ describe("Renderer", function() {
 
         it("can pass data to layout", async () => {
             let content = await renderer.render('test2', {
-                layout : 'layout',
+                viewLayout : 'layout',
                 title: 'Hello'
             })
 
             expect(content).to.be.eq('<h1>From LayoutHello</h1><h1>Test2</h1>');
+        })
+
+        it("can add additional view paths at render method", async() => {
+            let content = await renderer.render('test4', {
+                viewPath: path.join(__dirname, 'views2'),         
+                title: 'Hello'
+            })
+
+            expect(content).to.be.eq('test4');
         })
     })
 })
