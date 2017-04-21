@@ -5,7 +5,10 @@ var path = require('path');
 describe("Renderer", function() {
     const Renderer = require('../');
     let renderer = new Renderer({
-        viewEngines: { html:  'handlebars'},
+        viewEngines: { 
+            html:  'handlebars',
+            ejs: 'ejs'
+        },
         viewExt: 'html',
         viewPaths: __dirname
     });
@@ -27,7 +30,7 @@ describe("Renderer", function() {
         })
 
         it("should render by resolving path", async () => {
-            let content = await renderer.render('test2');
+            let content = await renderer.render('test2', {title: 'hi'});
             expect(content).to.be.eq('<h1>Test2</h1>');
         })
 
@@ -69,6 +72,13 @@ describe("Renderer", function() {
             })
 
             expect(content).to.be.eq('test4');
+        })
+
+        it("should support multiple engine",async () => {
+             let content = await renderer.render('hello.ejs', {
+                 title:'ejs'
+                })
+            expect(content).to.be.eq('hello ejs');
         })
     })
 })
