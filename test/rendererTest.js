@@ -10,7 +10,7 @@ describe("Renderer", function() {
             ejs: 'ejs'
         },
         viewExt: 'html',
-        viewPaths: __dirname
+        viewDirs:[ __dirname]
     });
 
     describe('#pathForScript', () => {
@@ -36,7 +36,7 @@ describe("Renderer", function() {
 
         it("should support multiple view dirs", async () => {
             renderer.options = Object.assign({}, renderer.options, {
-                viewPaths: [__dirname, path.join(__dirname, 'views')]
+                viewDirs: [__dirname, path.join(__dirname, 'views')]
             })
 
             let content = await renderer.render('test3');
@@ -67,7 +67,7 @@ describe("Renderer", function() {
 
         it("can add additional view paths at render method", async() => {
             let content = await renderer.render('test4', {
-                viewPath: path.join(__dirname, 'views2'),         
+                viewDir: path.join(__dirname, 'views2'),         
                 title: 'Hello'
             })
 
